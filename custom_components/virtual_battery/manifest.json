@@ -1,0 +1,13 @@
+{
+  "domain": "virtual_battery",
+  "name": "Virtual Battery",
+  "codeowners": ["@onrust"],
+  "config_flow": true,
+  "dependencies": ["recorder"],
+  "documentation": "https://github.com/onrust/virtual_battery",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/onrust/virtual_battery/issues",
+  "requirements": [],
+  "version": "0.1.1"
+}

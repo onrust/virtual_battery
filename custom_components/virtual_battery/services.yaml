@@ -1,0 +1,23 @@
+set_state:
+  fields:
+    soc:
+      selector:
+        number: {min: 0, max: 100, step: 0.01, unit_of_measurement: kWh, mode: box}
+    average_cost:
+      selector:
+        number: {min: 0, max: 5, step: 0.001, unit_of_measurement: "€/kWh", mode: box}
+    revenue_total:
+      selector:
+        number: {min: -100000, max: 100000, step: 0.001, unit_of_measurement: "€", mode: box}
+    revenue_today:
+      selector:
+        number: {min: -1000, max: 1000, step: 0.001, unit_of_measurement: "€", mode: box}
+
+import_history:
+  fields:
+    days:
+      default: 10
+      selector:
+        number: {min: 1, max: 60, step: 1, mode: box}
+
+generate_dashboard: {}

@@ -1,0 +1,946 @@
+[
+ {
+  "title": "Virtuele Batterij (integratie)",
+  "path": "virtuele-batterij",
+  "type": "sections",
+  "max_columns": 3,
+  "sections": [
+   {
+    "type": "grid",
+    "cards": [
+     {
+      "type": "heading",
+      "heading": "Energiestroom",
+      "icon": "mdi:transmission-tower"
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_revenue_today",
+      "name": "Opbrengst vandaag",
+      "grid_options": {
+       "columns": 6
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_revenue_total",
+      "name": "Opbrengst totaal (sinds start)",
+      "grid_options": {
+       "columns": 6
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_average_cost",
+      "name": "Gem. inkoopprijs opgeslagen energie",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_feed_in_discount",
+      "name": "Terugleverkorting (vanaf 2027)",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_min_margin",
+      "name": "Minimale winst per kWh",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_max_margin",
+      "name": "Max. marge voor laden (bij volle batterij)",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_expected_consumption",
+      "name": "Verbruik dit uur (uit weekprofiel)",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_solar_certainty",
+      "name": "Zon-zekerheid (voorspelling)",
+      "features": [
+       {
+        "type": "numeric-input",
+        "style": "slider"
+       }
+      ]
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_profile_weight_last",
+      "name": "Verbruik: gewicht laatste week",
+      "features": [
+       {
+        "type": "numeric-input",
+        "style": "slider"
+       }
+      ]
+     },
+     {
+      "type": "tile",
+      "entity": "number.virtual_battery_profile_mix",
+      "name": "Verbruik: menging werkdag/weekend",
+      "features": [
+       {
+        "type": "numeric-input",
+        "style": "slider"
+       }
+      ]
+     },
+     {
+      "entity": "number.virtual_battery_profile_weeks",
+      "features": [
+       {
+        "style": "slider",
+        "type": "numeric-input"
+       }
+      ],
+      "name": "Verbruik: aantal weken in profiel",
+      "type": "tile"
+     },
+     {
+      "entity": "number.virtual_battery_capacity",
+      "features": [
+       {
+        "style": "slider",
+        "type": "numeric-input"
+       }
+      ],
+      "name": "Batterij: capaciteit",
+      "type": "tile"
+     },
+     {
+      "entity": "number.virtual_battery_max_power",
+      "features": [
+       {
+        "style": "slider",
+        "type": "numeric-input"
+       }
+      ],
+      "name": "Batterij: max vermogen",
+      "type": "tile"
+     },
+     {
+      "entity": "number.virtual_battery_depreciation",
+      "features": [
+       {
+        "style": "slider",
+        "type": "numeric-input"
+       }
+      ],
+      "name": "Batterij: afschrijving per cyclus",
+      "type": "tile"
+     }
+    ]
+   },
+   {
+    "type": "grid",
+    "cards": [
+     {
+      "type": "heading",
+      "heading": "Besturing & status",
+      "icon": "mdi:battery-heart-variant"
+     },
+     {
+      "type": "tile",
+      "entity": "select.virtual_battery_strategy",
+      "name": "Strategie",
+      "features": [
+       {
+        "type": "select-options"
+       }
+      ],
+      "grid_options": {
+       "columns": 6
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "select.virtual_battery_ev_policy",
+      "name": "EV-beleid",
+      "features": [
+       {
+        "type": "select-options"
+       }
+      ],
+      "grid_options": {
+       "columns": 6
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_reason",
+      "name": "Wat doet de batterij nu?",
+      "vertical": true,
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_settlement_price",
+      "name": "Verrekenprijs (+ = laden, - = ontladen)",
+      "grid_options": {
+       "columns": 12
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "@@ev_power@@",
+      "name": "Tesla Wall Connector",
+      "grid_options": {
+       "columns": 6
+      }
+     },
+     {
+      "type": "tile",
+      "entity": "sensor.virtual_battery_combined_power",
+      "name": "Batterij + Wall Connector gecombineerd",
+      "grid_options": {
+       "columns": 6
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "type": "sections",
+  "max_columns": 4,
+  "title": "Forecast",
+  "path": "forecast",
+  "sections": [
+   {
+    "type": "grid",
+    "cards": [
+     {
+      "type": "custom:apexcharts-card",
+      "apex_config": {
+       "chart": {
+        "height": 280
+       },
+       "legend": {
+        "show": true
+       },
+       "plotOptions": {
+        "bar": {
+         "columnWidth": "85%"
+        }
+       },
+       "tooltip": {
+        "x": {
+         "format": "ddd HH:mm"
+        }
+       },
+       "xaxis": {
+        "labels": {
+         "datetimeUTC": false
+        }
+       }
+      },
+      "graph_span": "2d",
+      "grid_options": {
+       "columns": "full"
+      },
+      "header": {
+       "colorize_states": true,
+       "show": true,
+       "show_states": true,
+       "title": "Verwachte zonne-opbrengst per uur"
+      },
+      "now": {
+       "label": "Nu",
+       "show": true
+      },
+      "series": [
+       {
+        "color": "#f5a623",
+        "data_generator": "const p = entity.attributes.wh_period || {};\nreturn Object.entries(p).map(([t, wh]) => [new Date(t).getTime() + 30*60*1000, wh / 1000]);",
+        "entity": "@@forecast_today@@",
+        "float_precision": 1,
+        "name": "Vandaag",
+        "show": {
+         "in_header": "raw",
+         "legend_value": false
+        },
+        "type": "column",
+        "unit": "kWh"
+       },
+       {
+        "color": "#4a90d9",
+        "data_generator": "const p = entity.attributes.wh_period || {};\nreturn Object.entries(p).map(([t, wh]) => [new Date(t).getTime() + 30*60*1000, wh / 1000]);",
+        "entity": "@@forecast_tomorrow@@",
+        "float_precision": 1,
+        "name": "Morgen",
+        "show": {
+         "in_header": "raw",
+         "legend_value": false
+        },
+        "type": "column",
+        "unit": "kWh"
+       }
+      ],
+      "span": {
+       "start": "day"
+      },
+      "yaxis": [
+       {
+        "apex_config": {
+         "title": {
+          "text": "kWh"
+         }
+        },
+        "decimals": 1,
+        "min": 0
+       }
+      ]
+     },
+     {
+      "type": "custom:power-flow-card-plus",
+      "grid_options": {
+       "columns": 16,
+       "rows": 6
+      },
+      "entities": {
+       "battery": {
+        "entity": {
+         "consumption": "sensor.virtual_battery_discharge_power",
+         "production": "sensor.virtual_battery_charge_power"
+        },
+        "state_of_charge": "sensor.virtual_battery_soc_percent",
+        "show_state_of_charge": true,
+        "name": "Virtuele batterij"
+       },
+       "grid": {
+        "entity": {
+         "consumption": "sensor.virtual_battery_effective_import",
+         "production": "sensor.virtual_battery_effective_export"
+        }
+       },
+       "solar": {
+        "entity": "@@solar_power@@",
+        "name": "Zon",
+        "display_zero_state": true
+       },
+       "home": {
+        "entity": "sensor.virtual_battery_house_consumption",
+        "override_state": true
+       }
+      },
+      "clickable_entities": true,
+      "display_zero_lines": true,
+      "use_new_flow_rate_model": true,
+      "min_flow_rate": 0.75,
+      "max_flow_rate": 6,
+      "max_expected_power": 9000,
+      "min_expected_power": 0.01,
+      "kilo_threshold": 1000,
+      "base_decimals": 0,
+      "kilo_decimals": 2
+     },
+     {
+      "type": "history-graph",
+      "title": "Vermogen",
+      "hours_to_show": 24,
+      "grid_options": {
+       "columns": 16,
+       "rows": 6
+      },
+      "entities": [
+       {
+        "entity": "sensor.virtual_battery_power",
+        "name": "Vermogen (W)"
+       }
+      ]
+     },
+     {
+      "type": "history-graph",
+      "title": "SoC in kWh",
+      "hours_to_show": 24,
+      "grid_options": {
+       "columns": 16,
+       "rows": 6
+      },
+      "entities": [
+       {
+        "entity": "sensor.virtual_battery_soc",
+        "name": "SoC (kWh)"
+       },
+       {
+        "entity": "number.virtual_battery_capacity",
+        "name": "Capaciteit (kWh)",
+        "color": "#b0b0b0"
+       }
+      ]
+     },
+     {
+      "type": "custom:apexcharts-card",
+      "grid_options": {
+       "columns": "full"
+      },
+      "graph_span": "7d",
+      "span": {
+       "start": "isoWeek"
+      },
+      "header": {
+       "show": true,
+       "title": "Gemiddeld huisverbruik per uur in kWh, hele week (excl. auto)",
+       "show_states": false
+      },
+      "now": {
+       "show": true,
+       "label": "Nu"
+      },
+      "apex_config": {
+       "chart": {
+        "height": 380,
+        "stacked": true
+       },
+       "legend": {
+        "show": true
+       },
+       "plotOptions": {
+        "bar": {
+         "columnWidth": "90%"
+        }
+       },
+       "dataLabels": {
+        "enabled": false
+       },
+       "tooltip": {
+        "x": {
+         "format": "ddd HH:00"
+        }
+       },
+       "xaxis": {
+        "tickAmount": 28,
+        "labels": {
+         "datetimeUTC": false,
+         "format": "ddd HH:00",
+         "rotate": -45,
+         "rotateAlways": true
+        }
+       }
+      },
+      "yaxis": [
+       {
+        "min": 0,
+        "decimals": 2,
+        "apex_config": {
+         "title": {
+          "text": "kWh per uur"
+         }
+        }
+       }
+      ],
+      "series": [
+       {
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "name": "Werkdagen",
+        "color": "#4a90d9",
+        "type": "column",
+        "unit": "kWh",
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "const dagen = ['zo','ma','di','wo','do','vr','za'];\nconst p = entity.attributes.profiel || {};\nconst out = [];\nconst s = new Date(start); s.setMinutes(0,0,0);\nconst e = new Date(end).getTime();\nfor (let t = s.getTime(); t < e; t += 3600000) {\n  const d = new Date(t);\n  const wd = d.getDay();\n  const arr = p[dagen[wd]];\n  if (!arr) continue;\n  const isWeekend = (wd === 0 || wd === 6);\n  out.push([t + 1800000, (isWeekend === false) ? arr[d.getHours()] / 1000 : null]);\n}\nreturn out;",
+        "float_precision": 2
+       },
+       {
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "name": "Weekend",
+        "color": "#1abc9c",
+        "type": "column",
+        "unit": "kWh",
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "const dagen = ['zo','ma','di','wo','do','vr','za'];\nconst p = entity.attributes.profiel || {};\nconst out = [];\nconst s = new Date(start); s.setMinutes(0,0,0);\nconst e = new Date(end).getTime();\nfor (let t = s.getTime(); t < e; t += 3600000) {\n  const d = new Date(t);\n  const wd = d.getDay();\n  const arr = p[dagen[wd]];\n  if (!arr) continue;\n  const isWeekend = (wd === 0 || wd === 6);\n  out.push([t + 1800000, (isWeekend === true) ? arr[d.getHours()] / 1000 : null]);\n}\nreturn out;",
+        "float_precision": 2
+       }
+      ]
+     },
+     {
+      "type": "custom:apexcharts-card",
+      "apex_config": {
+       "chart": {
+        "height": 300
+       },
+       "legend": {
+        "show": true
+       },
+       "plotOptions": {
+        "bar": {
+         "columnWidth": "85%"
+        }
+       },
+       "tooltip": {
+        "x": {
+         "format": "ddd HH:00"
+        }
+       },
+       "xaxis": {
+        "labels": {
+         "datetimeUTC": false,
+         "format": "HH:00",
+         "rotate": -45,
+         "rotateAlways": true
+        },
+        "tickAmount": 24
+       }
+      },
+      "graph_span": "24h",
+      "grid_options": {
+       "columns": "full"
+      },
+      "header": {
+       "show": true,
+       "show_states": false,
+       "title": "Verwacht huisverbruik (excl. auto) vs. zonne-opbrengst, komende 24 uur"
+      },
+      "now": {
+       "label": "Nu",
+       "show": true
+      },
+      "series": [
+       {
+        "color": "#f5a623",
+        "data_generator": "const out = [];\nfor (const id of ['@@forecast_today@@', '@@forecast_tomorrow@@']) {\n  const st = hass.states[id];\n  if (!st) continue;\n  const p = st.attributes.wh_period || {};\n  for (const [t, wh] of Object.entries(p)) out.push([new Date(t).getTime() + 1800000, wh / 1000]);\n}\nreturn out;",
+        "entity": "@@forecast_today@@",
+        "float_precision": 1,
+        "name": "Zon (voorspeld)",
+        "show": {
+         "legend_value": false
+        },
+        "type": "column",
+        "unit": "kWh"
+       },
+       {
+        "color": "#4a90d9",
+        "data_generator": "const u = entity.attributes.komende_uren || [];\nreturn u.map(([t, w]) => [t + 1800000, w / 1000]);",
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "float_precision": 1,
+        "name": "Verbruik (verwacht)",
+        "show": {
+         "legend_value": false
+        },
+        "stroke_width": 3,
+        "type": "line",
+        "unit": "kWh"
+       }
+      ],
+      "span": {
+       "start": "hour"
+      },
+      "yaxis": [
+       {
+        "apex_config": {
+         "title": {
+          "text": "kWh"
+         }
+        },
+        "decimals": 1,
+        "min": 0
+       }
+      ]
+     },
+     {
+      "type": "custom:apexcharts-card",
+      "graph_span": "48h",
+      "span": {
+       "start": "day"
+      },
+      "header": {
+       "show": true,
+       "title": "Prijs met verwacht laad-/ontlaadschema"
+      },
+      "now": {
+       "show": true,
+       "label": "Nu"
+      },
+      "apex_config": {
+       "legend": {
+        "show": true
+       },
+       "chart": {
+        "height": 340
+       },
+       "stroke": {
+        "dashArray": [
+         0,
+         0,
+         0,
+         0,
+         0,
+         6,
+         0
+        ]
+       }
+      },
+      "yaxis": [
+       {
+        "min": -0.05,
+        "max": 0.6,
+        "apex_config": {
+         "decimalsInFloat": 2,
+         "tickAmount": 13,
+         "forceNiceScale": false
+        },
+        "id": "prijs"
+       },
+       {
+        "id": "kwh",
+        "opposite": true,
+        "min": 0,
+        "decimals": 1,
+        "apex_config": {
+         "title": {
+          "text": "SoC (kWh)"
+         },
+         "forceNiceScale": false,
+         "labels": {
+          "formatter": "EVAL:function(v){return v.toFixed(1);}"
+         },
+         "tickAmount": 8
+        }
+       }
+      ],
+      "series": [
+       {
+        "entity": "@@nordpool@@",
+        "name": "Prijs",
+        "type": "line",
+        "color": "#42a5f5",
+        "stroke_width": 2,
+        "extend_to": false,
+        "data_generator": "return entity.attributes.raw_today.concat(entity.attributes.tomorrow_valid ? entity.attributes.raw_tomorrow : []).map((entry) => { return [new Date(entry.start), entry.value]; });",
+        "float_precision": 2,
+        "yaxis_id": "prijs"
+       },
+       {
+        "entity": "@@nordpool@@",
+        "name": "Laden (net)",
+        "type": "area",
+        "color": "#9e9e9e",
+        "stroke_width": 0,
+        "extend_to": false,
+        "data_generator": "const nu = Date.now();\nconst hid = 'sensor.virtual_battery_power';\nconst SOL = '@@solar_power@@', HUIS = 'sensor.virtual_battery_house_consumption';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nif (!window.__vbHist || nu - window.__vbHist.t > 30000) {\n  window.__vbHist = {t: nu, p: hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [hid, SOL, HUIS], minimal_response: true, no_attributes: true, significant_changes_only: false}).catch(() => ({}))};\n}\nconst s = (hass && hass.states['sensor.virtual_battery_schedule_code']) || null;\nconst raw = s ? s.state : '';\nconst parts = raw.split(';');\nconst code = parts.length >= 2 ? parts[1] : '';\nconst startCode = parts.length >= 2 ? new Date(parts[0]).getTime() : 0;\nfunction actieOp(t) {\n  if (!code) return null;\n  const idx = Math.round((t - startCode) / (15*60000));\n  if (idx < 0 || idx >= code.length) return null;\n  return code[idx];\n}\nconst dagen = ['zo','ma','di','wo','do','vr','za'];\nconst pst = hass.states['sensor.virtual_battery_expected_consumption'];\nconst prof = (pst && pst.attributes.profiel) || {};\nconst zs = hass.states['number.virtual_battery_solar_certainty'];\nconst z = zs && !isNaN(parseFloat(zs.state)) ? parseFloat(zs.state)/100 : 0.8;\nconst zon = {};\nfor (const sid of ['sensor.virtual_battery_solar_forecast']) {\n  const st = hass.states[sid];\n  const wp = (st && st.attributes.wh_period) || {};\n  for (const [t, wh] of Object.entries(wp)) zon[new Date(t).getTime()] = wh;\n}\nfunction overschot(t) {\n  const h0 = Math.floor(t/3600000)*3600000;\n  const arr = prof[dagen[new Date(t).getDay()]];\n  if (!arr) return 0;\n  return (zon[h0]||0)*z - arr[new Date(t).getHours()];\n}\nconst so = hass.states['sensor.virtual_battery_expected_revenue'];\nconst splitL = {}, splitO = {};\n((so && so.attributes.laad_split) || []).forEach((r) => { splitL[r[0]] = r; });\n((so && so.attributes.ontlaad_split) || []).forEach((r) => { splitO[r[0]] = r; });\nconst alle = entity.attributes.raw_today.concat(entity.attributes.tomorrow_valid ? entity.attributes.raw_tomorrow : []);\nreturn window.__vbHist.p.then((res) => {\n  const mkPts = (id) => ((res && res[id]) || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const pts = mkPts(hid), ptsS = mkPts(SOL), ptsH = mkPts(HUIS);\n  function gem(t0, t1) { return gemP(pts, t0, t1); }\n  function gemP(pts, t0, t1) {\n    let i = 0, v = null, cur = t0, som = 0;\n    while (i < pts.length && pts[i][0] <= t0) { v = pts[i][1]; i++; }\n    for (; i < pts.length && pts[i][0] < t1; i++) { if (v !== null) som += v * (pts[i][0] - cur); cur = pts[i][0]; v = pts[i][1]; }\n    if (v !== null) som += v * (t1 - cur);\n    return som / (t1 - t0);\n  }\n  function soort(t) {\n    const sl = splitL[t], sd = splitO[t];\n    if (sl) return (sl[1] >= sl[2]) ? 'laden-zon' : 'laden-net';\n    if (sd) return (sd[1] >= sd[2]) ? 'ontladen-huis' : 'ontladen-net';\n    if (t + 900000 <= nu) {\n      const w = gem(t, t + 900000);\n      if (w > 50) { const sur = Math.max(0, gemP(ptsS, t, t + 900000) - gemP(ptsH, t, t + 900000)); return (Math.min(w, sur) >= w * 0.5) ? 'laden-zon' : 'laden-net'; }\n      if (w < -50) return (actieOp(t) === 'O') ? 'ontladen-net' : 'ontladen-huis';\n    }\n    return null;\n  }\n  const uit = [];\n  alle.forEach((entry) => {\n    const t = new Date(entry.start).getTime();\n    if (soort(t) === 'laden-net') { uit.push([new Date(t), 0.6]); uit.push([new Date(t + 899000), 0.6]); } else { uit.push([new Date(t), null]); }\n  });\n  return uit;\n});",
+        "opacity": 0.8,
+        "float_precision": 2,
+        "yaxis_id": "prijs"
+       },
+       {
+        "color": "#43a047",
+        "data_generator": "const nu = Date.now();\nconst hid = 'sensor.virtual_battery_power';\nconst SOL = '@@solar_power@@', HUIS = 'sensor.virtual_battery_house_consumption';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nif (!window.__vbHist || nu - window.__vbHist.t > 30000) {\n  window.__vbHist = {t: nu, p: hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [hid, SOL, HUIS], minimal_response: true, no_attributes: true, significant_changes_only: false}).catch(() => ({}))};\n}\nconst s = (hass && hass.states['sensor.virtual_battery_schedule_code']) || null;\nconst raw = s ? s.state : '';\nconst parts = raw.split(';');\nconst code = parts.length >= 2 ? parts[1] : '';\nconst startCode = parts.length >= 2 ? new Date(parts[0]).getTime() : 0;\nfunction actieOp(t) {\n  if (!code) return null;\n  const idx = Math.round((t - startCode) / (15*60000));\n  if (idx < 0 || idx >= code.length) return null;\n  return code[idx];\n}\nconst dagen = ['zo','ma','di','wo','do','vr','za'];\nconst pst = hass.states['sensor.virtual_battery_expected_consumption'];\nconst prof = (pst && pst.attributes.profiel) || {};\nconst zs = hass.states['number.virtual_battery_solar_certainty'];\nconst z = zs && !isNaN(parseFloat(zs.state)) ? parseFloat(zs.state)/100 : 0.8;\nconst zon = {};\nfor (const sid of ['sensor.virtual_battery_solar_forecast']) {\n  const st = hass.states[sid];\n  const wp = (st && st.attributes.wh_period) || {};\n  for (const [t, wh] of Object.entries(wp)) zon[new Date(t).getTime()] = wh;\n}\nfunction overschot(t) {\n  const h0 = Math.floor(t/3600000)*3600000;\n  const arr = prof[dagen[new Date(t).getDay()]];\n  if (!arr) return 0;\n  return (zon[h0]||0)*z - arr[new Date(t).getHours()];\n}\nconst so = hass.states['sensor.virtual_battery_expected_revenue'];\nconst splitL = {}, splitO = {};\n((so && so.attributes.laad_split) || []).forEach((r) => { splitL[r[0]] = r; });\n((so && so.attributes.ontlaad_split) || []).forEach((r) => { splitO[r[0]] = r; });\nconst alle = entity.attributes.raw_today.concat(entity.attributes.tomorrow_valid ? entity.attributes.raw_tomorrow : []);\nreturn window.__vbHist.p.then((res) => {\n  const mkPts = (id) => ((res && res[id]) || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const pts = mkPts(hid), ptsS = mkPts(SOL), ptsH = mkPts(HUIS);\n  function gem(t0, t1) { return gemP(pts, t0, t1); }\n  function gemP(pts, t0, t1) {\n    let i = 0, v = null, cur = t0, som = 0;\n    while (i < pts.length && pts[i][0] <= t0) { v = pts[i][1]; i++; }\n    for (; i < pts.length && pts[i][0] < t1; i++) { if (v !== null) som += v * (pts[i][0] - cur); cur = pts[i][0]; v = pts[i][1]; }\n    if (v !== null) som += v * (t1 - cur);\n    return som / (t1 - t0);\n  }\n  function soort(t) {\n    const sl = splitL[t], sd = splitO[t];\n    if (sl) return (sl[1] >= sl[2]) ? 'laden-zon' : 'laden-net';\n    if (sd) return (sd[1] >= sd[2]) ? 'ontladen-huis' : 'ontladen-net';\n    if (t + 900000 <= nu) {\n      const w = gem(t, t + 900000);\n      if (w > 50) { const sur = Math.max(0, gemP(ptsS, t, t + 900000) - gemP(ptsH, t, t + 900000)); return (Math.min(w, sur) >= w * 0.5) ? 'laden-zon' : 'laden-net'; }\n      if (w < -50) return (actieOp(t) === 'O') ? 'ontladen-net' : 'ontladen-huis';\n    }\n    return null;\n  }\n  const uit = [];\n  alle.forEach((entry) => {\n    const t = new Date(entry.start).getTime();\n    if (soort(t) === 'laden-zon') { uit.push([new Date(t), 0.6]); uit.push([new Date(t + 899000), 0.6]); } else { uit.push([new Date(t), null]); }\n  });\n  return uit;\n});",
+        "entity": "@@nordpool@@",
+        "extend_to": false,
+        "float_precision": 2,
+        "name": "Laden (zon-overschot)",
+        "opacity": 0.8,
+        "stroke_width": 0,
+        "type": "area",
+        "yaxis_id": "prijs"
+       },
+       {
+        "entity": "@@nordpool@@",
+        "name": "Ontladen (naar net)",
+        "type": "area",
+        "color": "#e53935",
+        "stroke_width": 0,
+        "extend_to": false,
+        "data_generator": "const nu = Date.now();\nconst hid = 'sensor.virtual_battery_power';\nconst SOL = '@@solar_power@@', HUIS = 'sensor.virtual_battery_house_consumption';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nif (!window.__vbHist || nu - window.__vbHist.t > 30000) {\n  window.__vbHist = {t: nu, p: hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [hid, SOL, HUIS], minimal_response: true, no_attributes: true, significant_changes_only: false}).catch(() => ({}))};\n}\nconst s = (hass && hass.states['sensor.virtual_battery_schedule_code']) || null;\nconst raw = s ? s.state : '';\nconst parts = raw.split(';');\nconst code = parts.length >= 2 ? parts[1] : '';\nconst startCode = parts.length >= 2 ? new Date(parts[0]).getTime() : 0;\nfunction actieOp(t) {\n  if (!code) return null;\n  const idx = Math.round((t - startCode) / (15*60000));\n  if (idx < 0 || idx >= code.length) return null;\n  return code[idx];\n}\nconst dagen = ['zo','ma','di','wo','do','vr','za'];\nconst pst = hass.states['sensor.virtual_battery_expected_consumption'];\nconst prof = (pst && pst.attributes.profiel) || {};\nconst zs = hass.states['number.virtual_battery_solar_certainty'];\nconst z = zs && !isNaN(parseFloat(zs.state)) ? parseFloat(zs.state)/100 : 0.8;\nconst zon = {};\nfor (const sid of ['sensor.virtual_battery_solar_forecast']) {\n  const st = hass.states[sid];\n  const wp = (st && st.attributes.wh_period) || {};\n  for (const [t, wh] of Object.entries(wp)) zon[new Date(t).getTime()] = wh;\n}\nfunction overschot(t) {\n  const h0 = Math.floor(t/3600000)*3600000;\n  const arr = prof[dagen[new Date(t).getDay()]];\n  if (!arr) return 0;\n  return (zon[h0]||0)*z - arr[new Date(t).getHours()];\n}\nconst so = hass.states['sensor.virtual_battery_expected_revenue'];\nconst splitL = {}, splitO = {};\n((so && so.attributes.laad_split) || []).forEach((r) => { splitL[r[0]] = r; });\n((so && so.attributes.ontlaad_split) || []).forEach((r) => { splitO[r[0]] = r; });\nconst alle = entity.attributes.raw_today.concat(entity.attributes.tomorrow_valid ? entity.attributes.raw_tomorrow : []);\nreturn window.__vbHist.p.then((res) => {\n  const mkPts = (id) => ((res && res[id]) || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const pts = mkPts(hid), ptsS = mkPts(SOL), ptsH = mkPts(HUIS);\n  function gem(t0, t1) { return gemP(pts, t0, t1); }\n  function gemP(pts, t0, t1) {\n    let i = 0, v = null, cur = t0, som = 0;\n    while (i < pts.length && pts[i][0] <= t0) { v = pts[i][1]; i++; }\n    for (; i < pts.length && pts[i][0] < t1; i++) { if (v !== null) som += v * (pts[i][0] - cur); cur = pts[i][0]; v = pts[i][1]; }\n    if (v !== null) som += v * (t1 - cur);\n    return som / (t1 - t0);\n  }\n  function soort(t) {\n    const sl = splitL[t], sd = splitO[t];\n    if (sl) return (sl[1] >= sl[2]) ? 'laden-zon' : 'laden-net';\n    if (sd) return (sd[1] >= sd[2]) ? 'ontladen-huis' : 'ontladen-net';\n    if (t + 900000 <= nu) {\n      const w = gem(t, t + 900000);\n      if (w > 50) { const sur = Math.max(0, gemP(ptsS, t, t + 900000) - gemP(ptsH, t, t + 900000)); return (Math.min(w, sur) >= w * 0.5) ? 'laden-zon' : 'laden-net'; }\n      if (w < -50) return (actieOp(t) === 'O') ? 'ontladen-net' : 'ontladen-huis';\n    }\n    return null;\n  }\n  const uit = [];\n  alle.forEach((entry) => {\n    const t = new Date(entry.start).getTime();\n    if (soort(t) === 'ontladen-net') { uit.push([new Date(t), 0.6]); uit.push([new Date(t + 899000), 0.6]); } else { uit.push([new Date(t), null]); }\n  });\n  return uit;\n});",
+        "opacity": 0.8,
+        "float_precision": 2,
+        "yaxis_id": "prijs"
+       },
+       {
+        "entity": "@@nordpool@@",
+        "name": "Ontladen (naar huis)",
+        "type": "area",
+        "color": "#1565c0",
+        "stroke_width": 0,
+        "extend_to": false,
+        "data_generator": "const nu = Date.now();\nconst hid = 'sensor.virtual_battery_power';\nconst SOL = '@@solar_power@@', HUIS = 'sensor.virtual_battery_house_consumption';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nif (!window.__vbHist || nu - window.__vbHist.t > 30000) {\n  window.__vbHist = {t: nu, p: hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [hid, SOL, HUIS], minimal_response: true, no_attributes: true, significant_changes_only: false}).catch(() => ({}))};\n}\nconst s = (hass && hass.states['sensor.virtual_battery_schedule_code']) || null;\nconst raw = s ? s.state : '';\nconst parts = raw.split(';');\nconst code = parts.length >= 2 ? parts[1] : '';\nconst startCode = parts.length >= 2 ? new Date(parts[0]).getTime() : 0;\nfunction actieOp(t) {\n  if (!code) return null;\n  const idx = Math.round((t - startCode) / (15*60000));\n  if (idx < 0 || idx >= code.length) return null;\n  return code[idx];\n}\nconst dagen = ['zo','ma','di','wo','do','vr','za'];\nconst pst = hass.states['sensor.virtual_battery_expected_consumption'];\nconst prof = (pst && pst.attributes.profiel) || {};\nconst zs = hass.states['number.virtual_battery_solar_certainty'];\nconst z = zs && !isNaN(parseFloat(zs.state)) ? parseFloat(zs.state)/100 : 0.8;\nconst zon = {};\nfor (const sid of ['sensor.virtual_battery_solar_forecast']) {\n  const st = hass.states[sid];\n  const wp = (st && st.attributes.wh_period) || {};\n  for (const [t, wh] of Object.entries(wp)) zon[new Date(t).getTime()] = wh;\n}\nfunction overschot(t) {\n  const h0 = Math.floor(t/3600000)*3600000;\n  const arr = prof[dagen[new Date(t).getDay()]];\n  if (!arr) return 0;\n  return (zon[h0]||0)*z - arr[new Date(t).getHours()];\n}\nconst so = hass.states['sensor.virtual_battery_expected_revenue'];\nconst splitL = {}, splitO = {};\n((so && so.attributes.laad_split) || []).forEach((r) => { splitL[r[0]] = r; });\n((so && so.attributes.ontlaad_split) || []).forEach((r) => { splitO[r[0]] = r; });\nconst alle = entity.attributes.raw_today.concat(entity.attributes.tomorrow_valid ? entity.attributes.raw_tomorrow : []);\nreturn window.__vbHist.p.then((res) => {\n  const mkPts = (id) => ((res && res[id]) || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const pts = mkPts(hid), ptsS = mkPts(SOL), ptsH = mkPts(HUIS);\n  function gem(t0, t1) { return gemP(pts, t0, t1); }\n  function gemP(pts, t0, t1) {\n    let i = 0, v = null, cur = t0, som = 0;\n    while (i < pts.length && pts[i][0] <= t0) { v = pts[i][1]; i++; }\n    for (; i < pts.length && pts[i][0] < t1; i++) { if (v !== null) som += v * (pts[i][0] - cur); cur = pts[i][0]; v = pts[i][1]; }\n    if (v !== null) som += v * (t1 - cur);\n    return som / (t1 - t0);\n  }\n  function soort(t) {\n    const sl = splitL[t], sd = splitO[t];\n    if (sl) return (sl[1] >= sl[2]) ? 'laden-zon' : 'laden-net';\n    if (sd) return (sd[1] >= sd[2]) ? 'ontladen-huis' : 'ontladen-net';\n    if (t + 900000 <= nu) {\n      const w = gem(t, t + 900000);\n      if (w > 50) { const sur = Math.max(0, gemP(ptsS, t, t + 900000) - gemP(ptsH, t, t + 900000)); return (Math.min(w, sur) >= w * 0.5) ? 'laden-zon' : 'laden-net'; }\n      if (w < -50) return (actieOp(t) === 'O') ? 'ontladen-net' : 'ontladen-huis';\n    }\n    return null;\n  }\n  const uit = [];\n  alle.forEach((entry) => {\n    const t = new Date(entry.start).getTime();\n    if (soort(t) === 'ontladen-huis') { uit.push([new Date(t), 0.6]); uit.push([new Date(t + 899000), 0.6]); } else { uit.push([new Date(t), null]); }\n  });\n  return uit;\n});",
+        "opacity": 0.8,
+        "float_precision": 2,
+        "yaxis_id": "prijs"
+       },
+       {
+        "entity": "sensor.virtual_battery_expected_revenue",
+        "name": "SoC verwacht (kWh)",
+        "type": "line",
+        "yaxis_id": "kwh",
+        "color": "#ff9800",
+        "stroke_width": 2,
+        "curve": "straight",
+        "extend_to": false,
+        "float_precision": 1,
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "const so = hass.states['sensor.virtual_battery_expected_revenue'];\nconst r = (so && so.attributes.soc_reeks) || [];\nreturn r.map((p) => [p[0], p[1]]);"
+       },
+       {
+        "entity": "sensor.virtual_battery_soc",
+        "name": "SoC werkelijk (kWh)",
+        "type": "line",
+        "yaxis_id": "kwh",
+        "color": "#8e24aa",
+        "stroke_width": 3,
+        "curve": "straight",
+        "extend_to": false,
+        "float_precision": 1,
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "const id = 'sensor.virtual_battery_soc';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nconst nu = Date.now();\nreturn hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [id], minimal_response: true, no_attributes: true, significant_changes_only: false}).then((res) => {\n  const pts = (res[id] || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const out = [];\n  let laatste = 0;\n  for (const p of pts) { if (p[0] - laatste >= 300000) { out.push(p); laatste = p[0]; } }\n  const cur = hass.states[id];\n  if (cur && !isNaN(parseFloat(cur.state))) out.push([nu, parseFloat(cur.state)]);\n  return out;\n}).catch(() => []);"
+       },
+       {
+        "entity": "number.virtual_battery_capacity",
+        "name": "as-hulp kwh",
+        "type": "line",
+        "yaxis_id": "kwh",
+        "color": "rgba(0,0,0,0)",
+        "stroke_width": 0,
+        "extend_to": false,
+        "show": {
+         "in_legend": false,
+         "legend_value": false,
+         "in_header": false
+        },
+        "data_generator": "// Onzichtbare hulpreeks: zet de bovengrens van de rechteras op de ingestelde batterijcapaciteit\nconst cs = hass.states['number.virtual_battery_capacity'];\nconst cap = cs && !isNaN(parseFloat(cs.state)) ? parseFloat(cs.state) : 16;\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nreturn [[d0.getTime() + 1800000, 0], [d0.getTime() + 5400000, cap]];"
+       }
+      ],
+      "grid_options": {
+       "columns": "full"
+      }
+     },
+     {
+      "apex_config": {
+       "chart": {
+        "height": 340,
+        "stacked": false
+       },
+       "dataLabels": {
+        "enabled": false
+       },
+       "legend": {
+        "show": true
+       },
+       "plotOptions": {
+        "bar": {
+         "columnWidth": "95%"
+        }
+       },
+       "tooltip": {
+        "x": {
+         "format": "ddd HH:00"
+        },
+        "enabledOnSeries": [
+         0,
+         1,
+         2,
+         3
+        ]
+       },
+       "xaxis": {
+        "labels": {
+         "datetimeUTC": false,
+         "format": "HH",
+         "rotate": -90,
+         "rotateAlways": true,
+         "style": {
+          "fontSize": "10px"
+         }
+        },
+        "tickAmount": 48
+       },
+       "annotations": {
+        "yaxis": [
+         {
+          "y": 0,
+          "yAxisIndex": 0,
+          "borderColor": "#757575",
+          "borderWidth": 2,
+          "strokeDashArray": 0
+         }
+        ]
+       },
+       "stroke": {
+        "colors": [
+         "transparent",
+         "transparent",
+         "#ff9800",
+         "#8e24aa",
+         "transparent",
+         "transparent"
+        ]
+       },
+       "markers": {
+        "size": 0
+       }
+      },
+      "graph_span": "2d",
+      "grid_options": {
+       "columns": "full"
+      },
+      "header": {
+       "show": true,
+       "show_states": false,
+       "title": "Saldo zon minus huisverbruik (excl. auto) per uur, met opbrengst batterij, vandaag en morgen"
+      },
+      "now": {
+       "label": "Nu",
+       "show": true
+      },
+      "series": [
+       {
+        "color": "#1e88e5",
+        "data_generator": "const d0 = new Date(); d0.setHours(0,0,0,0);\nconst curH = Math.floor(Date.now()/3600000)*3600000;\nwindow.__vbP = window.__vbP || {};\nif (curH <= d0.getTime()) { window.__vbP.gemeten = Promise.resolve([]); return []; }\nconst ids = ['@@solar_energy@@','@@import_energy@@','@@export_energy@@','@@ev_energy@@'];\nconst __p = hass.callWS({type:'recorder/statistics_during_period', start_time:d0.toISOString(), end_time:new Date(curH).toISOString(), statistic_ids:ids, period:'hour', types:['change']}).then((res) => {\n  const m = {};\n  ids.forEach((id, k) => { (res[id]||[]).forEach((r) => { const t = typeof r.start === 'number' ? r.start : new Date(r.start).getTime(); (m[t] = m[t] || {})[k] = r.change || 0; }); });\n  return Object.keys(m).map(Number).sort((a,b)=>a-b).filter((t) => m[t][0] !== undefined).map((t) => { const x = m[t]; const verbruik = x[0] + (x[1]||0) - (x[2]||0) - (x[3]||0); return [t + 1800000, x[0] - verbruik]; });\n}).catch(() => []);\nwindow.__vbP.gemeten = __p;\nreturn __p;",
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "float_precision": 2,
+        "name": "Gemeten",
+        "show": {
+         "legend_value": false
+        },
+        "type": "column",
+        "unit": "kWh",
+        "yaxis_id": "kwh",
+        "stroke_width": 2
+       },
+       {
+        "color": "#fb8c00",
+        "data_generator": "const dagen = ['zo','ma','di','wo','do','vr','za'];\nconst p = entity.attributes.profiel || {};\nconst zs = hass.states['number.virtual_battery_solar_certainty'];\nconst z = zs && !isNaN(parseFloat(zs.state)) ? parseFloat(zs.state)/100 : 0.8;\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nconst maps = [];\nfor (const id of ['sensor.virtual_battery_solar_forecast','sensor.virtual_battery_solar_forecast']) {\n  const st = hass.states[id]; const mm = {};\n  const wp = (st && st.attributes.wh_period) || {};\n  for (const [t, wh] of Object.entries(wp)) mm[new Date(t).getTime()] = wh;\n  maps.push(mm);\n}\nconst out = [];\nfor (let t = d0.getTime(); t < d0.getTime() + 48*3600000; t += 3600000) {\n  const mm = t < d0.getTime() + 24*3600000 ? maps[0] : maps[1];\n  if (Object.keys(mm).length === 0) continue;\n  const d = new Date(t);\n  const arr = p[dagen[d.getDay()]];\n  if (!arr) continue;\n  out.push([t + 1800000, ((mm[t]||0)/1000)*z - arr[d.getHours()]/1000]);\n}\nwindow.__vbP = window.__vbP || {};\nwindow.__vbP.verwacht = Promise.resolve(out);\nreturn out;",
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "float_precision": 2,
+        "name": "Verwacht (bijgestuurd)",
+        "show": {
+         "legend_value": false
+        },
+        "type": "column",
+        "unit": "kWh",
+        "yaxis_id": "kwh",
+        "stroke_width": 2
+       },
+       {
+        "entity": "sensor.virtual_battery_expected_revenue",
+        "name": "Opbrengst verwacht",
+        "type": "line",
+        "yaxis_id": "eur",
+        "color": "#ff9800",
+        "stroke_width": 2,
+        "curve": "straight",
+        "unit": "€",
+        "float_precision": 2,
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "// Punt midden in elk uur (net als de staven) = verwachte opbrengst aan het eind van dat uur\nconst r = entity.attributes.reeks || [];\nconst nu = Date.now();\nconst hs = hass.states['sensor.virtual_battery_revenue_today'];\nconst huidig = hs ? parseFloat(hs.state) : NaN;\nconst mid = Math.floor(nu / 3600000) * 3600000 + 1800000;\nconst out = r.filter((p) => p[1] !== null && p[0] % 3600000 === 0 && p[0] - 1800000 > mid).map((p) => [p[0] - 1800000, p[1]]);\nif (!isNaN(huidig)) out.unshift([mid, huidig]);\nwindow.__vbP = window.__vbP || {};\nwindow.__vbP.eurV = Promise.resolve(out);\nreturn out;",
+        "extend_to": false
+       },
+       {
+        "entity": "sensor.virtual_battery_revenue_today",
+        "name": "Opbrengst gerealiseerd",
+        "type": "line",
+        "yaxis_id": "eur",
+        "color": "#8e24aa",
+        "stroke_width": 3,
+        "curve": "straight",
+        "unit": "€",
+        "float_precision": 2,
+        "show": {
+         "legend_value": false
+        },
+        "data_generator": "// Punt midden in elk uur (net als de staven) = gerealiseerde opbrengst aan het eind van dat uur (of nu)\nconst id = 'sensor.virtual_battery_revenue_today';\nconst d0 = new Date(); d0.setHours(0,0,0,0);\nconst nu = Date.now();\nwindow.__vbP = window.__vbP || {};\nconst __p = hass.callWS({type: 'history/history_during_period', start_time: d0.toISOString(), end_time: new Date(nu).toISOString(), entity_ids: [id], minimal_response: true, no_attributes: true, significant_changes_only: false}).then((res) => {\n  const pts = (res[id] || []).map((x) => [typeof x.lu === 'number' ? x.lu * 1000 : new Date(x.last_updated || x.last_changed).getTime(), parseFloat(x.s !== undefined ? x.s : x.state)]).filter((p) => !isNaN(p[1])).sort((a, b) => a[0] - b[0]);\n  const huidig = hass.states[id] ? parseFloat(hass.states[id].state) : NaN;\n  const out = [];\n  let i = 0, laatste = null;\n  for (let h = d0.getTime(); h < nu; h += 3600000) {\n    const eind = Math.min(h + 3600000, nu);\n    while (i < pts.length && pts[i][0] <= eind) { laatste = pts[i][1]; i++; }\n    let v = laatste;\n    if (h + 3600000 > nu && !isNaN(huidig)) v = huidig;\n    if (v !== null) out.push([h + 1800000, v]);\n  }\n  return out;\n}).catch(() => []);\nwindow.__vbP.eurR = __p;\nreturn __p;",
+        "extend_to": false
+       },
+       {
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "name": "as-hulp kwh",
+        "type": "line",
+        "yaxis_id": "kwh",
+        "color": "rgba(0,0,0,0)",
+        "stroke_width": 0,
+        "extend_to": false,
+        "show": {
+         "in_legend": false,
+         "legend_value": false,
+         "in_header": false
+        },
+        "data_generator": "// Onzichtbare hulpreeks: rekt de as zo op dat 0 links en rechts op dezelfde maatstreep valt (8 stappen)\nconst P = window.__vbP || {};\nreturn Promise.all([P.gemeten, P.verwacht, P.eurV, P.eurR].map((p) => Promise.resolve(p).catch(() => []))).then((r) => {\n  const ext = (a) => { let n = 0, p = 0; (a || []).forEach((q) => { const x = q[1]; if (x === null || x === undefined || isNaN(x)) return; if (x < n) n = x; if (x > p) p = x; }); return [-n, p]; };\n  const k1 = ext(r[0]), k2 = ext(r[1]), e1 = ext(r[2]), e2 = ext(r[3]);\n  const kn = Math.max(k1[0], k2[0]) * 1.1, kp = Math.max(Math.max(k1[1], k2[1]) * 1.1, 0.1);\n  const en = Math.max(e1[0], e2[0]) * 1.1, ep = Math.max(Math.max(e1[1], e2[1]) * 1.1, 0.1);\n  const f = Math.min(7/8, Math.ceil(Math.max(kn / (kn + kp), en / (en + ep)) * 8 - 1e-9) / 8);\n  const fit = (n, p) => f <= 0 ? [0, p] : (n / (n + p) > f ? [-n, n * (1 - f) / f] : [-p * f / (1 - f), p]);\n  const b = 'kwh' === 'kwh' ? fit(kn, kp) : fit(en, ep);\n  const d0 = new Date(); d0.setHours(0,0,0,0);\n  return [[d0.getTime() + 1800000, b[0]], [d0.getTime() + 5400000, b[1]]];\n});"
+       },
+       {
+        "entity": "sensor.virtual_battery_expected_consumption",
+        "name": "as-hulp eur",
+        "type": "line",
+        "yaxis_id": "eur",
+        "color": "rgba(0,0,0,0)",
+        "stroke_width": 0,
+        "extend_to": false,
+        "show": {
+         "in_legend": false,
+         "legend_value": false,
+         "in_header": false
+        },
+        "data_generator": "// Onzichtbare hulpreeks: rekt de as zo op dat 0 links en rechts op dezelfde maatstreep valt (8 stappen)\nconst P = window.__vbP || {};\nreturn Promise.all([P.gemeten, P.verwacht, P.eurV, P.eurR].map((p) => Promise.resolve(p).catch(() => []))).then((r) => {\n  const ext = (a) => { let n = 0, p = 0; (a || []).forEach((q) => { const x = q[1]; if (x === null || x === undefined || isNaN(x)) return; if (x < n) n = x; if (x > p) p = x; }); return [-n, p]; };\n  const k1 = ext(r[0]), k2 = ext(r[1]), e1 = ext(r[2]), e2 = ext(r[3]);\n  const kn = Math.max(k1[0], k2[0]) * 1.1, kp = Math.max(Math.max(k1[1], k2[1]) * 1.1, 0.1);\n  const en = Math.max(e1[0], e2[0]) * 1.1, ep = Math.max(Math.max(e1[1], e2[1]) * 1.1, 0.1);\n  const f = Math.min(7/8, Math.ceil(Math.max(kn / (kn + kp), en / (en + ep)) * 8 - 1e-9) / 8);\n  const fit = (n, p) => f <= 0 ? [0, p] : (n / (n + p) > f ? [-n, n * (1 - f) / f] : [-p * f / (1 - f), p]);\n  const b = 'eur' === 'kwh' ? fit(kn, kp) : fit(en, ep);\n  const d0 = new Date(); d0.setHours(0,0,0,0);\n  return [[d0.getTime() + 1800000, b[0]], [d0.getTime() + 5400000, b[1]]];\n});"
+       }
+      ],
+      "span": {
+       "start": "day"
+      },
+      "type": "custom:apexcharts-card",
+      "yaxis": [
+       {
+        "id": "kwh",
+        "decimals": 1,
+        "apex_config": {
+         "title": {
+          "text": "kWh per uur (+ = overschot, − = tekort)"
+         },
+         "tickAmount": 8,
+         "forceNiceScale": false,
+         "labels": {
+          "formatter": "EVAL:function(v){var x=Math.abs(v)<1e-9?0:v;return x.toFixed(1);}"
+         }
+        }
+       },
+       {
+        "id": "eur",
+        "opposite": true,
+        "decimals": 2,
+        "apex_config": {
+         "title": {
+          "text": "Opbrengst batterij per dag (€)"
+         },
+         "tickAmount": 8,
+         "forceNiceScale": false,
+         "labels": {
+          "formatter": "EVAL:function(v){var x=Math.abs(v)<1e-9?0:v;return '€ '+x.toFixed(2);}"
+         }
+        }
+       }
+      ]
+     }
+    ],
+    "column_span": 4
+   }
+  ],
+  "icon": "mdi:solar-power-variant-outline",
+  "cards": []
+ }
+]

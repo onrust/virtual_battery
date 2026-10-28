@@ -1,0 +1,238 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Virtual Battery: sensors",
+        "description": "Choose the sensors the simulation reads. Power sensors may be in W or kW.",
+        "data": {
+          "name": "Name",
+          "nordpool_sensor": "Nordpool price sensor",
+          "price_sensor": "Actual price sensor (optional, default: Nordpool)",
+          "grid_import_power": "Grid import power",
+          "grid_export_power": "Grid export power",
+          "solar_power": "Solar power",
+          "solar_energy": "Solar energy (kWh counter)",
+          "grid_import_energy": "Grid import energy (kWh counter)",
+          "grid_export_energy": "Grid export energy (kWh counter)",
+          "ev_power": "EV charger power (optional)",
+          "ev_energy": "EV charger energy (optional)",
+          "forecast_today": "Solar forecast today (Open-Meteo Solar Forecast)",
+          "forecast_tomorrow": "Solar forecast tomorrow",
+          "forecast_remaining": "Solar forecast remaining today (optional)"
+        }
+      },
+      "battery": {
+        "title": "Virtual Battery: battery",
+        "description": "These can be changed later with the number entities.",
+        "data": {
+          "capacity_kwh": "Capacity",
+          "max_power_kw": "Maximum charge/discharge power",
+          "depreciation_cent": "Depreciation per full cycle",
+          "feed_in_discount": "Feed-in discount"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Virtual Battery: sensors",
+        "description": "Choose the sensors the simulation reads. Power sensors may be in W or kW.",
+        "data": {
+          "name": "Name",
+          "nordpool_sensor": "Nordpool price sensor",
+          "price_sensor": "Actual price sensor (optional, default: Nordpool)",
+          "grid_import_power": "Grid import power",
+          "grid_export_power": "Grid export power",
+          "solar_power": "Solar power",
+          "solar_energy": "Solar energy (kWh counter)",
+          "grid_import_energy": "Grid import energy (kWh counter)",
+          "grid_export_energy": "Grid export energy (kWh counter)",
+          "ev_power": "EV charger power (optional)",
+          "ev_energy": "EV charger energy (optional)",
+          "forecast_today": "Solar forecast today (Open-Meteo Solar Forecast)",
+          "forecast_tomorrow": "Solar forecast tomorrow",
+          "forecast_remaining": "Solar forecast remaining today (optional)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "effective_export": {
+        "name": "Effective grid export"
+      },
+      "effective_import": {
+        "name": "Effective grid import"
+      },
+      "plan": {
+        "name": "Plan"
+      },
+      "charge_power": {
+        "name": "Charge power"
+      },
+      "schedule_code": {
+        "name": "Day schedule code"
+      },
+      "average_cost": {
+        "name": "Average purchase price"
+      },
+      "revenue_total": {
+        "name": "Revenue total"
+      },
+      "expected_revenue": {
+        "name": "Expected revenue"
+      },
+      "soc_percent": {
+        "name": "State of charge (%)"
+      },
+      "house_consumption": {
+        "name": "House consumption"
+      },
+      "settlement_price": {
+        "name": "Settlement price"
+      },
+      "soc": {
+        "name": "State of charge"
+      },
+      "power": {
+        "name": "Power"
+      },
+      "solar_forecast": {
+        "name": "Solar forecast (adjusted)"
+      },
+      "combined_power": {
+        "name": "Combined power (incl. EV)"
+      },
+      "reason": {
+        "name": "Reason"
+      },
+      "discharge_power": {
+        "name": "Discharge power"
+      },
+      "revenue_today": {
+        "name": "Revenue today"
+      },
+      "expected_consumption": {
+        "name": "Expected consumption"
+      },
+      "day_view": {
+        "name": "Day overview (selected day)"
+      },
+      "moment_view": {
+        "name": "Selected quarter"
+      }
+    },
+    "number": {
+      "profile_weight_last": {
+        "name": "Consumption profile: weight of last week"
+      },
+      "profile_weeks": {
+        "name": "Consumption profile: number of weeks"
+      },
+      "profile_mix": {
+        "name": "Consumption profile: weekday/weekend mix"
+      },
+      "max_power": {
+        "name": "Maximum power"
+      },
+      "feed_in_discount": {
+        "name": "Feed-in discount"
+      },
+      "max_margin": {
+        "name": "Maximum charging margin"
+      },
+      "min_margin": {
+        "name": "Minimum profit per kWh"
+      },
+      "capacity": {
+        "name": "Capacity"
+      },
+      "min_soc": {
+        "name": "Minimum SoC"
+      },
+      "depreciation": {
+        "name": "Depreciation per cycle"
+      },
+      "solar_certainty": {
+        "name": "Solar certainty"
+      }
+    },
+    "select": {
+      "strategy": {
+        "name": "Strategy",
+        "state": {
+          "price_optimization": "Price optimization",
+          "zero_meter": "Zero on the meter",
+          "hybrid": "Hybrid (price + self-consumption)",
+          "charge_now": "Charge now",
+          "discharge_now": "Discharge now",
+          "off": "Off"
+        }
+      },
+      "ev_policy": {
+        "name": "EV policy",
+        "state": {
+          "never": "Never",
+          "night_only": "Evenings/nights only",
+          "always": "Always allowed (if profitable)"
+        }
+      }
+    },
+    "date": {
+      "view_date": {
+        "name": "Archive: date"
+      }
+    },
+    "time": {
+      "view_time": {
+        "name": "Archive: time"
+      }
+    }
+  },
+  "services": {
+    "set_state": {
+      "name": "Set state",
+      "description": "Set the starting state of the virtual battery (e.g. to copy an existing battery).",
+      "fields": {
+        "soc": {
+          "name": "State of charge",
+          "description": "kWh"
+        },
+        "average_cost": {
+          "name": "Average cost",
+          "description": "€/kWh"
+        },
+        "revenue_total": {
+          "name": "Total revenue",
+          "description": "€"
+        },
+        "revenue_today": {
+          "name": "Revenue today",
+          "description": "€"
+        },
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "Optional"
+        }
+      }
+    },
+    "import_history": {
+      "name": "Import history",
+      "description": "Fill the day archive with quarters from the recorder history.",
+      "fields": {
+        "days": {
+          "name": "Number of days",
+          "description": "1-60"
+        }
+      }
+    },
+    "generate_dashboard": {
+      "name": "Generate dashboard",
+      "description": "Builds the ready-made dashboard with your own entities, writes it to /config/virtual_battery/dashboard.yaml and returns it."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e88e5"/><stop offset="1" stop-color="#0d47a1"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="124" fill="url(#bg)"/>
+  <!-- batterij (liggend) -->
+  <rect x="48" y="86" width="140" height="84" rx="16" fill="none" stroke="#fff" stroke-width="10"/>
+  <rect x="194" y="108" width="16" height="40" rx="6" fill="#fff"/>
+  <!-- ladingsbalken -->
+  <rect x="62" y="100" width="30" height="56" rx="6" fill="#fb8c00"/>
+  <rect x="98" y="100" width="30" height="56" rx="6" fill="#fb8c00"/>
+  <rect x="134" y="100" width="40" height="56" rx="6" fill="none" stroke="#fb8c00" stroke-width="5" stroke-dasharray="9 7"/>
+  <!-- bliksem -->
+  <path d="M138 44 L102 128 H126 L114 184 L162 100 H136 Z" fill="#ffb74d" stroke="#0d47a1" stroke-width="6" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,238 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Virtuele Batterij: sensoren",
+        "description": "Kies de sensoren die de simulatie leest. Vermogenssensoren mogen in W of kW zijn.",
+        "data": {
+          "name": "Naam",
+          "nordpool_sensor": "Nordpool-prijssensor",
+          "price_sensor": "Actuele prijssensor (optioneel, standaard: Nordpool)",
+          "grid_import_power": "Netafname (vermogen)",
+          "grid_export_power": "Netteruglevering (vermogen)",
+          "solar_power": "Zonvermogen",
+          "solar_energy": "Zonopbrengst (kWh-teller)",
+          "grid_import_energy": "Netafname (kWh-teller)",
+          "grid_export_energy": "Netteruglevering (kWh-teller)",
+          "ev_power": "Laadpaal vermogen (optioneel)",
+          "ev_energy": "Laadpaal energie (optioneel)",
+          "forecast_today": "Zonvoorspelling vandaag (Open-Meteo Solar Forecast)",
+          "forecast_tomorrow": "Zonvoorspelling morgen",
+          "forecast_remaining": "Zonvoorspelling rest van vandaag (optioneel)"
+        }
+      },
+      "battery": {
+        "title": "Virtuele Batterij: batterij",
+        "description": "Deze waarden kun je later aanpassen met de number-entiteiten.",
+        "data": {
+          "capacity_kwh": "Capaciteit",
+          "max_power_kw": "Maximaal laad-/ontlaadvermogen",
+          "depreciation_cent": "Afschrijving per volledige cyclus",
+          "feed_in_discount": "Terugleverkorting"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Is al ingesteld"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Virtuele Batterij: sensoren",
+        "description": "Kies de sensoren die de simulatie leest. Vermogenssensoren mogen in W of kW zijn.",
+        "data": {
+          "name": "Naam",
+          "nordpool_sensor": "Nordpool-prijssensor",
+          "price_sensor": "Actuele prijssensor (optioneel, standaard: Nordpool)",
+          "grid_import_power": "Netafname (vermogen)",
+          "grid_export_power": "Netteruglevering (vermogen)",
+          "solar_power": "Zonvermogen",
+          "solar_energy": "Zonopbrengst (kWh-teller)",
+          "grid_import_energy": "Netafname (kWh-teller)",
+          "grid_export_energy": "Netteruglevering (kWh-teller)",
+          "ev_power": "Laadpaal vermogen (optioneel)",
+          "ev_energy": "Laadpaal energie (optioneel)",
+          "forecast_today": "Zonvoorspelling vandaag (Open-Meteo Solar Forecast)",
+          "forecast_tomorrow": "Zonvoorspelling morgen",
+          "forecast_remaining": "Zonvoorspelling rest van vandaag (optioneel)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "effective_export": {
+        "name": "Effectieve teruglevering"
+      },
+      "effective_import": {
+        "name": "Effectieve afname"
+      },
+      "plan": {
+        "name": "Plan"
+      },
+      "charge_power": {
+        "name": "Laadvermogen"
+      },
+      "schedule_code": {
+        "name": "Dagschema-code"
+      },
+      "average_cost": {
+        "name": "Gemiddelde inkoopprijs"
+      },
+      "revenue_total": {
+        "name": "Opbrengst totaal"
+      },
+      "expected_revenue": {
+        "name": "Verwachte opbrengst"
+      },
+      "soc_percent": {
+        "name": "Laadtoestand (%)"
+      },
+      "house_consumption": {
+        "name": "Huisverbruik"
+      },
+      "settlement_price": {
+        "name": "Verrekenprijs"
+      },
+      "soc": {
+        "name": "Laadtoestand"
+      },
+      "power": {
+        "name": "Vermogen"
+      },
+      "solar_forecast": {
+        "name": "Zonverwachting (bijgestuurd)"
+      },
+      "combined_power": {
+        "name": "Gecombineerd vermogen (incl. auto)"
+      },
+      "reason": {
+        "name": "Reden"
+      },
+      "discharge_power": {
+        "name": "Ontlaadvermogen"
+      },
+      "revenue_today": {
+        "name": "Opbrengst vandaag"
+      },
+      "expected_consumption": {
+        "name": "Verwacht verbruik"
+      },
+      "day_view": {
+        "name": "Dagoverzicht (gekozen dag)"
+      },
+      "moment_view": {
+        "name": "Gekozen kwartier"
+      }
+    },
+    "number": {
+      "profile_weight_last": {
+        "name": "Verbruiksprofiel: gewicht laatste week"
+      },
+      "profile_weeks": {
+        "name": "Verbruiksprofiel: aantal weken"
+      },
+      "profile_mix": {
+        "name": "Verbruiksprofiel: menging werkdag/weekend"
+      },
+      "max_power": {
+        "name": "Maximaal vermogen"
+      },
+      "feed_in_discount": {
+        "name": "Terugleverkorting"
+      },
+      "max_margin": {
+        "name": "Maximale marge laden"
+      },
+      "min_margin": {
+        "name": "Minimale winst per kWh"
+      },
+      "capacity": {
+        "name": "Capaciteit"
+      },
+      "min_soc": {
+        "name": "Minimale SoC (ondergrens)"
+      },
+      "depreciation": {
+        "name": "Afschrijving per cyclus"
+      },
+      "solar_certainty": {
+        "name": "Zon-zekerheid"
+      }
+    },
+    "select": {
+      "strategy": {
+        "name": "Strategie",
+        "state": {
+          "price_optimization": "Prijsoptimalisatie",
+          "zero_meter": "Nul op de meter",
+          "hybrid": "Hybride (prijs + zelfverbruik)",
+          "charge_now": "Nu opladen",
+          "discharge_now": "Nu ontladen",
+          "off": "Uit"
+        }
+      },
+      "ev_policy": {
+        "name": "EV-beleid",
+        "state": {
+          "never": "Nooit",
+          "night_only": "Alleen 's avonds/'s nachts",
+          "always": "Altijd toegestaan (indien voordelig)"
+        }
+      }
+    },
+    "date": {
+      "view_date": {
+        "name": "Archief: datum"
+      }
+    },
+    "time": {
+      "view_time": {
+        "name": "Archief: tijd"
+      }
+    }
+  },
+  "services": {
+    "set_state": {
+      "name": "Stand instellen",
+      "description": "Zet de beginstand van de virtuele batterij (bijv. om een bestaande batterij over te nemen).",
+      "fields": {
+        "soc": {
+          "name": "Laadtoestand",
+          "description": "kWh"
+        },
+        "average_cost": {
+          "name": "Gemiddelde inkoopprijs",
+          "description": "€/kWh"
+        },
+        "revenue_total": {
+          "name": "Totale opbrengst",
+          "description": "€"
+        },
+        "revenue_today": {
+          "name": "Opbrengst vandaag",
+          "description": "€"
+        },
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "Optioneel"
+        }
+      }
+    },
+    "import_history": {
+      "name": "Historie inladen",
+      "description": "Vul het dagarchief met kwartieren uit de recorder-historie.",
+      "fields": {
+        "days": {
+          "name": "Aantal dagen",
+          "description": "1-60"
+        }
+      }
+    },
+    "generate_dashboard": {
+      "name": "Dashboard genereren",
+      "description": "Bouwt het kant-en-klare dashboard met je eigen entiteiten, schrijft het naar /config/virtual_battery/dashboard.yaml en toont het resultaat."
+    }
+  }
+}
