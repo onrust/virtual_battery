@@ -206,23 +206,42 @@ def engine_tick(inp: Inputs, st: State) -> dict:
                             "plan": inp.schedule.get(b.key), "b": b})
         return out
 
-    def marginale_latere_waarde(soc_nu, huidig_key):
-        """Waarde (€/kWh geleverd) van de laagste latere toepassing die de voorraad nog nodig heeft, of None als de
-        voorraad alle latere toepassingen ruim dekt. Latere toepassingen tot het volgende laadmoment: verkopen in een
-        geplande ontlaad-kwartier (prijs min terugleverkorting) en zelfverbruik (de marktprijs van dat kwartier, tegen
-        het verwachte netto huisverbruik). De voorraad gaat naar de hoogste waarden; de laatste die nog wordt gevuld
-        is de marginale waarde van een kWh die we nu niet gebruiken."""
-        vanaf = [b for b in blokken_vanaf(huidig_key) if b["key"] > huidig_key]
-        volgend_laad = next((b["start"] for b in vanaf if b["plan"] and b["plan"]["action"] == "laden"), None)
-        bieders = []
-        for b in vanaf:
-            if volgend_laad is not None and b["start"] >= volgend_laad:
+    def vrije_voorraad(huidig_key):
+        """Bruikbare voorraad (opgeslagen kWh boven de ondergrens) die het plan NIET nodig heeft: de laagste verwachte
+        stand langs het plan (geplande laadacties erbij, geplande ontladingen eraf) vanaf de echte stand van nu.
+        Alleen dit deel mag buiten het plan om worden gebruikt; de rest is gereserveerd voor geplande ontladingen."""
+        stand = usable
+        minimum = usable
+        for b in blokken_vanaf(huidig_key):
+            if b["key"] <= huidig_key or not b["plan"]:
                 continue
-            if b["plan"] and b["plan"]["action"] == "ontladen":
-                bieders.append((b["price"] - korting, (MAXP / 1000) * b["dur_h"]))
-            bieders.append((b["price"], netto_verbruik_kwh(b["b"])))
+            p = b["plan"]
+            if p["action"] == "laden":
+                stand = min(CAP - FLOOR, stand + (p["power_w"] / 1000) * b["dur_h"] * ONEWAY)
+            elif p["action"] == "ontladen":
+                stand -= (p["power_w"] / 1000) * b["dur_h"] / ONEWAY
+            minimum = min(minimum, stand)
+        return max(0.0, minimum)
+
+    def marginale_latere_waarde(voorraad_kwh, huidig_key):
+        """Waarde (€/kWh geleverd) van de laagste latere toepassing die de (vrije) voorraad nog kan vullen, of None als
+        de voorraad alle latere toepassingen dekt. Toepassingen zijn wat het plan nog NIET dekt: verkopen in een geplande
+        ontlaad-kwartier (prijs min terugleverkorting, tot het max. vermogen) en zelfverbruik (de marktprijs van dat
+        kwartier, tegen het verwachte netto huisverbruik). De voorraad gaat naar de hoogste waarden; de laatste die nog
+        wordt gevuld is de waarde van een kWh die we nu niet gebruiken."""
+        bieders = []
+        for b in blokken_vanaf(huidig_key):
+            if b["key"] <= huidig_key:
+                continue
+            p = b["plan"]
+            gepland = gepland_zelf = 0.0
+            if p and p["action"] == "ontladen":
+                gepland = (p["power_w"] / 1000) * b["dur_h"]
+                gepland_zelf = min(gepland, ((p.get("self_w") or 0) / 1000) * b["dur_h"])
+                bieders.append((b["price"] - korting, max(0.0, (MAXP / 1000) * b["dur_h"] - gepland)))
+            bieders.append((b["price"], max(0.0, netto_verbruik_kwh(b["b"]) - gepland_zelf)))
         bieders.sort(key=lambda x: -x[0])
-        voorraad = soc_nu * ONEWAY
+        voorraad = voorraad_kwh * ONEWAY
         for waarde, cap in bieders:
             if cap <= 0:
                 continue
@@ -428,11 +447,14 @@ def engine_tick(inp: Inputs, st: State) -> dict:
         def pak_zelfverbruik(context):
             if not is_hybride or afname_dekken <= 1 or usable <= 0.001:
                 return False
-            later = marginale_latere_waarde(usable, hour_key)
+            vrij = vrije_voorraad(hour_key)
+            if vrij <= 0.001:
+                return False
+            later = marginale_latere_waarde(vrij, hour_key)
             netto_later = later if later is not None else -math.inf
             if import_price <= netto_later:
                 return False
-            kw = min(MAXP / 1000, afname_dekken / 1000, (usable * ONEWAY) / DT_H if usable > 0 else 0)
+            kw = min(MAXP / 1000, afname_dekken / 1000, (vrij * ONEWAY) / DT_H)
             res["p"] = -max(0, kw) * 1000
             if res["p"] < -1:
                 vergelijk = msg(lang, "self_use_cheaper", net=fx(netto_later, 3)) if later is not None \
@@ -520,7 +542,8 @@ def engine_tick(inp: Inputs, st: State) -> dict:
             pass
         elif not plan or plan["action"] == "idle":
             res["r"] = msg(lang, "idle_not_profitable", extra=(
-                msg(lang, "extra_self_use_not_better") if (is_hybride and afname_dekken > 1)
+                (msg(lang, "extra_reserved_for_plan") if vrije_voorraad(hour_key) <= 0.001 and usable > 0.001
+                 else msg(lang, "extra_self_use_not_better")) if (is_hybride and afname_dekken > 1)
                 else (msg(lang, "extra_prefer_feed_in") if (is_hybride and p1_productie > 1) else "")))
         power_w = res["p"]
         reden = res["r"]

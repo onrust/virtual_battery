@@ -201,7 +201,7 @@ Every quarter hour the integration stores one record (price, charged/discharged 
 | Strategy | What the simulated battery does |
 |---|---|
 | **Price optimization** | Follows the day schedule: charges in cheap quarters, discharges in the best expensive ones. When a better moment is still ahead before the next charge, it waits. |
-| **Hybrid (price + self-consumption)** *(default)* | Like price optimization, but also covers your own consumption from the battery whenever your import price is higher than the best later use of the stored energy (selling it, or covering your own consumption at that moment's market price). It also stores solar surplus when that beats exporting it. |
+| **Hybrid (price + self-consumption)** *(default)* | Like price optimization, but also covers your own consumption from the battery whenever your import price is higher than the best later use of the stored energy (selling it, or covering your own consumption at that moment's market price) — but only with energy the plan does not need for its own planned discharges. It also stores solar surplus when that beats exporting it. |
 | **Zero on the meter** | Classic home-battery behaviour: charges from solar surplus (unless a later sale is clearly better, see `max_margin`) and discharges to bring the meter to zero. Includes an emergency valve in the afternoon for a low battery. |
 | **Charge now** / **Discharge now** | Full power until full or down to the floor. For testing. |
 | **Off** | The battery does nothing. |

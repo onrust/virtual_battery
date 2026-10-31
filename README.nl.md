@@ -200,7 +200,7 @@ Elk kwartier bewaart de integratie één record (prijs, geladen/ontladen kWh, hu
 | Strategie | Wat de gesimuleerde batterij doet |
 |---|---|
 | **Prijsoptimalisatie** | Volgt het dagschema: laadt in goedkope kwartieren, ontlaadt in de beste dure kwartieren. Als er voor het volgende laadmoment nog een beter moment komt, wacht hij. |
-| **Hybride (prijs + zelfverbruik)** *(standaard)* | Als prijsoptimalisatie, maar dekt ook je eigen verbruik uit de batterij zodra je inkoopprijs hoger is dan de beste latere toepassing van de opgeslagen energie (verkopen, of je eigen verbruik dekken tegen de marktprijs van dat moment). Slaat ook zonne-overschot op als dat beter is dan terugleveren. |
+| **Hybride (prijs + zelfverbruik)** *(standaard)* | Als prijsoptimalisatie, maar dekt ook je eigen verbruik uit de batterij zodra je inkoopprijs hoger is dan de beste latere toepassing van de opgeslagen energie (verkopen, of je eigen verbruik dekken tegen de marktprijs van dat moment) — maar alleen met energie die het plan niet nodig heeft voor de geplande ontladingen. Slaat ook zonne-overschot op als dat beter is dan terugleveren. |
 | **Nul op de meter** | Klassiek thuisbatterijgedrag: laadt uit zonne-overschot (tenzij een latere verkoop duidelijk beter is, zie `max_margin`) en ontlaadt om de meter op nul te brengen. Heeft een noodklep in de middag voor een lage batterij. |
 | **Nu opladen** / **Nu ontladen** | Vol vermogen tot vol of tot de ondergrens. Voor testen. |
 | **Uit** | De batterij doet niets. |

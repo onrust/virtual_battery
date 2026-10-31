@@ -124,18 +124,32 @@ def simulate(inp: SimInputs) -> dict:
                 return b.start_ms
         return None
 
-    def marg_latere_waarde(soc_nu, key):
-        vanaf = [b for b in vanaf_blok(key) if b.start_ms > key]
-        laad_ms = volgende_actie_ms(vanaf, "laden")
-        bieders = []
-        for b in vanaf:
-            if laad_ms is not None and b.start_ms >= laad_ms:
+    def vrije_voorraad(usable_nu, key):
+        """Bruikbare voorraad die het plan niet nodig heeft (laagste verwachte stand langs het plan)."""
+        stand = minimum = usable_nu
+        for b in vanaf_blok(key):
+            if b.start_ms <= key or not b.plan:
                 continue
+            if b.plan["action"] == "laden":
+                stand = min(CAP - FLOOR, stand + (b.plan["power_w"] / 1000) * b.dur_h * ONEWAY)
+            elif b.plan["action"] == "ontladen":
+                stand -= (b.plan["power_w"] / 1000) * b.dur_h / ONEWAY
+            minimum = min(minimum, stand)
+        return max(0.0, minimum)
+
+    def marg_latere_waarde(voorraad_kwh, key):
+        bieders = []
+        for b in vanaf_blok(key):
+            if b.start_ms <= key:
+                continue
+            gepland = gepland_zelf = 0.0
             if b.plan and b.plan["action"] == "ontladen":
-                bieders.append((b.price - korting, (MAXP / 1000) * b.dur_h))
-            bieders.append((b.price, netto_verbruik_kwh(b)))
+                gepland = (b.plan["power_w"] / 1000) * b.dur_h
+                gepland_zelf = min(gepland, ((b.plan.get("self_w") or 0) / 1000) * b.dur_h)
+                bieders.append((b.price - korting, max(0.0, (MAXP / 1000) * b.dur_h - gepland)))
+            bieders.append((b.price, max(0.0, netto_verbruik_kwh(b) - gepland_zelf)))
         bieders.sort(key=lambda x: -x[0])
-        voorraad = soc_nu * ONEWAY
+        voorraad = voorraad_kwh * ONEWAY
         for waarde, cap in bieders:
             if cap <= 0:
                 continue
@@ -237,11 +251,14 @@ def simulate(inp: SimInputs) -> dict:
             def pak_zelfverbruik():
                 if not is_hybride or afname_w <= 1 or usable <= 0.001:
                     return False
-                mp = marg_latere_waarde(usable, b.key)
+                vrij = vrije_voorraad(usable, b.key)
+                if vrij <= 0.001:
+                    return False
+                mp = marg_latere_waarde(vrij, b.key)
                 netto_later = mp if mp is not None else -math.inf
                 if import_price <= netto_later:
                     return False
-                p["w"] = -max(0, min(MAXP / 1000, afname_w / 1000, ontlaad_max_kw)) * 1000
+                p["w"] = -max(0, min(MAXP / 1000, afname_w / 1000, (vrij * ONEWAY) / dH if vrij > 0 else 0)) * 1000
                 return p["w"] < -1
 
             def pak_zon_overschot():
