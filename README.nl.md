@@ -155,7 +155,7 @@ Entiteit-id's volgen `<domein>.<naam>_<sleutel>`, bijvoorbeeld `sensor.virtual_b
 | `expected_revenue` | € | Verwachte eindopbrengst van vandaag. De attributen (`reeks`, `soc_reeks`, `laad_split`, `ontlaad_split`) voeden de dashboardgrafieken; `verwacht_morgen` bevat de verwachting voor morgen. |
 | `average_cost` | €/kWh | Gewogen gemiddelde inkoopprijs van de energie in de batterij (energie onder de ondergrens telt niet mee). De engine ontlaadt alleen voor zelfverbruik als dit beter is dan het alternatief. |
 | `settlement_price` | €/kWh | Wat de energie op dit moment "waard" was: positief bij laden (kosten), negatief bij ontladen (besparing). |
-| `reason` | tekst | Uitleg in gewone taal van wat de batterij nu doet en waarom ("Ontladen @ 880 W — zelfverbruik nu (€0,391) is voordeliger dan later verkopen (netto €0,348)"). |
+| `reason` | tekst | Uitleg in gewone taal van wat de batterij nu doet en waarom ("Ontladen @ 880 W — zelfverbruik nu (€0,391) is voordeliger dan de beste latere toepassing (€0,348)"). |
 | `plan` | tekst | Welk plan de planner koos, *A* of *B* (zie onder), en het voordeel in €. |
 | `schedule_code` | tekst | Het dagschema als compacte tekst: starttijd, dan een letter per kwartier: **I** niets, **L** laden, **O** ontladen. Gebruikt door het dashboard. |
 | `solar_forecast` | kWh | Zonvoorspelling na nowcast-correctie (attributen: waarden per periode). |
@@ -200,7 +200,7 @@ Elk kwartier bewaart de integratie één record (prijs, geladen/ontladen kWh, hu
 | Strategie | Wat de gesimuleerde batterij doet |
 |---|---|
 | **Prijsoptimalisatie** | Volgt het dagschema: laadt in goedkope kwartieren, ontlaadt in de beste dure kwartieren. Als er voor het volgende laadmoment nog een beter moment komt, wacht hij. |
-| **Hybride (prijs + zelfverbruik)** *(standaard)* | Als prijsoptimalisatie, maar dekt ook je eigen verbruik uit de batterij zodra je inkoopprijs hoger is dan wat de opgeslagen energie later zou opleveren. Slaat ook zonne-overschot op als dat beter is dan terugleveren. |
+| **Hybride (prijs + zelfverbruik)** *(standaard)* | Als prijsoptimalisatie, maar dekt ook je eigen verbruik uit de batterij zodra je inkoopprijs hoger is dan de beste latere toepassing van de opgeslagen energie (verkopen, of je eigen verbruik dekken tegen de marktprijs van dat moment). Slaat ook zonne-overschot op als dat beter is dan terugleveren. |
 | **Nul op de meter** | Klassiek thuisbatterijgedrag: laadt uit zonne-overschot (tenzij een latere verkoop duidelijk beter is, zie `max_margin`) en ontlaadt om de meter op nul te brengen. Heeft een noodklep in de middag voor een lage batterij. |
 | **Nu opladen** / **Nu ontladen** | Vol vermogen tot vol of tot de ondergrens. Voor testen. |
 | **Uit** | De batterij doet niets. |

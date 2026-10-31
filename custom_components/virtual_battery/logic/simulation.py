@@ -124,22 +124,25 @@ def simulate(inp: SimInputs) -> dict:
                 return b.start_ms
         return None
 
-    def marg_binnen_horizon(soc_nu, key):
-        vanaf = vanaf_blok(key)
+    def marg_latere_waarde(soc_nu, key):
+        vanaf = [b for b in vanaf_blok(key) if b.start_ms > key]
         laad_ms = volgende_actie_ms(vanaf, "laden")
-        ontlaad = [b for b in vanaf if b.plan and b.plan["action"] == "ontladen"]
-        voor = sorted([b for b in ontlaad if laad_ms is None or b.start_ms < laad_ms], key=lambda b: -b.price)
-        na = sorted([b for b in ontlaad if laad_ms is not None and b.start_ms >= laad_ms], key=lambda b: -b.price)
-        bl = voor + na
-        if not bl:
-            return None
-        needed, last = soc_nu * ONEWAY, bl[0].price
-        for b in bl:
-            if needed <= 0:
-                break
-            needed -= (MAXP / 1000) * b.dur_h
-            last = b.price
-        return last
+        bieders = []
+        for b in vanaf:
+            if laad_ms is not None and b.start_ms >= laad_ms:
+                continue
+            if b.plan and b.plan["action"] == "ontladen":
+                bieders.append((b.price - korting, (MAXP / 1000) * b.dur_h))
+            bieders.append((b.price, netto_verbruik_kwh(b)))
+        bieders.sort(key=lambda x: -x[0])
+        voorraad = soc_nu * ONEWAY
+        for waarde, cap in bieders:
+            if cap <= 0:
+                continue
+            voorraad -= cap
+            if voorraad <= 0:
+                return waarde
+        return None
 
     def wacht_beter(soc_nu, key):
         vanaf = vanaf_blok(key)
@@ -234,8 +237,8 @@ def simulate(inp: SimInputs) -> dict:
             def pak_zelfverbruik():
                 if not is_hybride or afname_w <= 1 or usable <= 0.001:
                     return False
-                mp = marg_binnen_horizon(usable, b.key)
-                netto_later = (mp - korting) if mp is not None else -math.inf
+                mp = marg_latere_waarde(usable, b.key)
+                netto_later = mp if mp is not None else -math.inf
                 if import_price <= netto_later:
                     return False
                 p["w"] = -max(0, min(MAXP / 1000, afname_w / 1000, ontlaad_max_kw)) * 1000

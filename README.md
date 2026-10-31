@@ -156,7 +156,7 @@ Entity ids follow `<domain>.<name>_<key>`, e.g. for the default name `sensor.vir
 | `expected_revenue` | € | Forecast of today's final revenue. The attributes (`reeks`, `soc_reeks`, `laad_split`, `ontlaad_split`) feed the dashboard charts, and `verwacht_morgen` holds tomorrow's expectation. |
 | `average_cost` | €/kWh | Weighted average purchase price of the energy in the battery (energy below the floor is ignored). The engine will only discharge for self-consumption if this beats the alternative. |
 | `settlement_price` | €/kWh | What the energy moved in the current moment was "worth": positive when charging (cost), negative when discharging (saving). |
-| `reason` | text | Plain-language explanation of what the battery does now and why ("Discharging @ 880 W — self-consumption now (€0.391) beats selling later (net €0.348)"). |
+| `reason` | text | Plain-language explanation of what the battery does now and why ("Discharging @ 880 W — self-consumption now (€0.391) beats the best later use (€0.348)"). |
 | `plan` | text | Which plan the planner chose, *A* or *B* (see below), and its advantage in €. |
 | `schedule_code` | text | The day schedule as a compact string: start time, then one letter per 15 minutes: **I**dle, **L** charge, **O** discharge. Used by the dashboard. |
 | `solar_forecast` | kWh | Solar forecast after the nowcast correction (attributes: per-period values). |
@@ -201,7 +201,7 @@ Every quarter hour the integration stores one record (price, charged/discharged 
 | Strategy | What the simulated battery does |
 |---|---|
 | **Price optimization** | Follows the day schedule: charges in cheap quarters, discharges in the best expensive ones. When a better moment is still ahead before the next charge, it waits. |
-| **Hybrid (price + self-consumption)** *(default)* | Like price optimization, but also covers your own consumption from the battery whenever your import price is higher than what the stored energy would earn later. It also stores solar surplus when that beats exporting it. |
+| **Hybrid (price + self-consumption)** *(default)* | Like price optimization, but also covers your own consumption from the battery whenever your import price is higher than the best later use of the stored energy (selling it, or covering your own consumption at that moment's market price). It also stores solar surplus when that beats exporting it. |
 | **Zero on the meter** | Classic home-battery behaviour: charges from solar surplus (unless a later sale is clearly better, see `max_margin`) and discharges to bring the meter to zero. Includes an emergency valve in the afternoon for a low battery. |
 | **Charge now** / **Discharge now** | Full power until full or down to the floor. For testing. |
 | **Off** | The battery does nothing. |
