@@ -435,23 +435,30 @@ def engine_tick(inp: Inputs, st: State) -> dict:
                 return True
             return False
 
-        def pak_zon_overschot(context):
+        def zon_overschot_opslag():
+            """(vermogen in W, drempelprijs) als het huidige zonoverschot opslaan loont, anders None."""
             if not is_hybride or p1_productie <= 1:
-                return False
+                return None
             headroom = CAP - soc
             if headroom <= 0.01:
-                return False
+                return None
             drempel = duurste_benodigde_laadprijs(headroom)
             if drempel is None:
-                return False
+                return None
             waarde_opslaan = drempel * ONEWAY - WEAR_PER_KWH
             if waarde_opslaan <= export_price:
+                return None
+            kw = min(MAXP / 1000, p1_productie / 1000, headroom / (ONEWAY * DT_H))
+            return max(0, kw) * 1000, drempel
+
+        def pak_zon_overschot(context):
+            opslag = zon_overschot_opslag()
+            if opslag is None:
                 return False
             cc["v"] = export_price
-            kw = min(MAXP / 1000, p1_productie / 1000, headroom / (ONEWAY * DT_H))
-            res["p"] = max(0, kw) * 1000
+            res["p"] = opslag[0]
             if res["p"] > 1:
-                res["r"] = msg(lang, "store_surplus", w=jsround(res["p"]), threshold=fx(drempel, 3), price=fx(export_price, 3), context=context)
+                res["r"] = msg(lang, "store_surplus", w=jsround(res["p"]), threshold=fx(opslag[1], 3), price=fx(export_price, 3), context=context)
                 return True
             return False
 
@@ -484,6 +491,11 @@ def engine_tick(inp: Inputs, st: State) -> dict:
                 headroom = CAP - soc
                 kw = min(plan["power_w"] / 1000, MAXP / 1000, headroom / (ONEWAY * DT_H) if headroom > 0 else 0)
                 res["p"] = max(0, kw) * 1000
+                # Het geplande vermogen is een minimum voor het zondeel: is er meer zonoverschot dan gepland
+                # (prognose te laag, nowcast, wolkengat) en loont opslaan, dan gaat het hele overschot de batterij in.
+                opslag = zon_overschot_opslag()
+                if opslag is not None and opslag[0] > res["p"]:
+                    res["p"] = opslag[0]
                 zon_deel = min(1, max(0, p1_productie) / res["p"]) if res["p"] > 1 else 0
                 cc["v"] = zon_deel * export_price + (1 - zon_deel) * import_price
                 if res["p"] > 1:
